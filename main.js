@@ -35,6 +35,29 @@ function count_paths(number_of_stairs){
     return count_paths(number_of_stairs - 1) + count_paths(number_of_stairs - 2) + count_paths(number_of_stairs - 3);
 }
 
+
+// The count_paths solution works, but the time complexity is horrible
+// The reason for this is that it has to calculate multiple times the sames values 
+// In order to resolve this, we use a hash table to store the results of the calculations that we already made
+// Therefore changing the time complexity from O(3^N) to O(N)
+// It's called memoization (there's not typo)
+function count_paths_with_memoization(number_of_stairs, memo){
+    if (number_of_stairs == 1) return 1;
+    if (number_of_stairs == 2) return 2;
+    if (number_of_stairs == 3) return 4;
+    if (memo[number_of_stairs]) return memo[number_of_stairs];
+
+    memo[number_of_stairs] = count_paths_with_memoization(number_of_stairs - 1, memo) + count_paths_with_memoization(number_of_stairs - 2, memo) + count_paths_with_memoization(number_of_stairs - 3, memo);
+    
+    // To see how the memo builds up, un-comment the next line
+    // console.log(memo)
+    return memo[number_of_stairs];
+}
+
+//console.log(count_paths(40)) // This would take forever to load : O(3^N)
+
+console.log(count_paths_with_memoization(80, {})); // This takes no time : O(N)
+
 function staircase_button_clicked(){
     let n = document.getElementById("staircase_input").value ;
     let solution = count_paths(n);
